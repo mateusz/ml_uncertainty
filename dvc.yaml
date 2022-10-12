@@ -1,6 +1,6 @@
 stages:
   generate:
-    cmd: python src/gen.py
+    cmd: python src/gen.py 
     deps:
       - src/gen.py
       - src/generators.py

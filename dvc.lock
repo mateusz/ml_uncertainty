@@ -4,8 +4,8 @@ stages:
     cmd: python src/gen.py
     deps:
     - path: src/gen.py
-      md5: 69d955a6020ba2673f4fab7c509e4a6b
-      size: 654
+      md5: 8b7f9618c6c344fd77f5c14c62f77014
+      size: 753
     - path: src/generators.py
       md5: 122e2cdaab18d7a3acbcb8742aac1983
       size: 1519
@@ -19,26 +19,26 @@ stages:
           r_scale:
           - 0.1
           - 1.0
-          n_train: 1000
-          n_val: 100
-          n_test: 100
+          n_train: 10000
+          n_val: 1000
+          n_test: 1000
         seed: 0
     outs:
     - path: data/test.csv
-      md5: 456288227be6ce06d85892d57caa54c1
-      size: 2668
+      md5: 26cecde48c97579acd9d3a44e7ce05a2
+      size: 26708
     - path: data/train.csv
-      md5: 0bd971eb9bcb3901785d5334876e40f9
-      size: 26733
+      md5: f5d02749680a89788930926616b902fe
+      size: 274670
     - path: data/val.csv
-      md5: e564043261a4b8a80930f32be2ffae23
-      size: 2668
+      md5: e433f4902fd7b511e44390eb1acf8166
+      size: 26772
     - path: evaluation/test_stripplot.png
-      md5: 7a6c2bb2130b5f70dbd406184607a9bc
-      size: 20109
+      md5: 08586ad55b14a9d97d0c5decd0240ef1
+      size: 30648
     - path: evaluation/train_stripplot.png
-      md5: 636e60fba237bfc78be167d6d732cc25
-      size: 31599
+      md5: da06c8b85723059a9b0fac1db31a5cc3
+      size: 25188
     - path: evaluation/val_stripplot.png
-      md5: 24dc90fe755e5fc30eb247168a7e03bc
-      size: 24364
+      md5: d770c608fdb67a264eb4b8b1eec012ec
+      size: 32580
