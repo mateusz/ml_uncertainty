@@ -1,0 +1,17 @@
+stages:
+  generate:
+    cmd: python src/gen.py
+    deps:
+      - src/gen.py
+      - src/generators.py
+    outs:
+      - data/train.csv
+      - data/val.csv
+      - data/test.csv
+    params:
+      - seed
+      - generate
+    plots:
+      - evaluation/train_stripplot.png
+      - evaluation/val_stripplot.png
+      - evaluation/test_stripplot.png

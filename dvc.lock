@@ -1,0 +1,44 @@
+schema: '2.0'
+stages:
+  generate:
+    cmd: python src/gen.py
+    deps:
+    - path: src/gen.py
+      md5: 69d955a6020ba2673f4fab7c509e4a6b
+      size: 654
+    - path: src/generators.py
+      md5: 122e2cdaab18d7a3acbcb8742aac1983
+      size: 1519
+    params:
+      params.yaml:
+        generate:
+          r: 10
+          r_loc:
+          - -1.0
+          - 1.0
+          r_scale:
+          - 0.1
+          - 1.0
+          n_train: 1000
+          n_val: 100
+          n_test: 100
+        seed: 0
+    outs:
+    - path: data/test.csv
+      md5: 456288227be6ce06d85892d57caa54c1
+      size: 2668
+    - path: data/train.csv
+      md5: 0bd971eb9bcb3901785d5334876e40f9
+      size: 26733
+    - path: data/val.csv
+      md5: e564043261a4b8a80930f32be2ffae23
+      size: 2668
+    - path: evaluation/test_stripplot.png
+      md5: 7a6c2bb2130b5f70dbd406184607a9bc
+      size: 20109
+    - path: evaluation/train_stripplot.png
+      md5: 636e60fba237bfc78be167d6d732cc25
+      size: 31599
+    - path: evaluation/val_stripplot.png
+      md5: 24dc90fe755e5fc30eb247168a7e03bc
+      size: 24364

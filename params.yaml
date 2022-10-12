@@ -1,0 +1,12 @@
+seed: 0
+generate:
+  r: 10
+  r_loc:
+    - -1.0
+    - 1.0
+  r_scale:
+    - 0.1
+    - 1.0
+  n_train: 1000
+  n_val: 100
+  n_test: 100
