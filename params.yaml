@@ -1,6 +1,6 @@
 seed: 0
 generate:
-  r: 10
+  r: 20
   r_loc:
     - -1.0
     - 1.0
@@ -9,4 +9,11 @@ generate:
     - 1.0
   n_train: 10000
   n_val: 1000
-  n_test: 1000
+  n_test: 10000
+train:
+  embed_size: 4
+  dense_size: 128
+  dense_dropout: 0.5
+  learning_rate: 0.01
+eval:
+  repeats: 1000
