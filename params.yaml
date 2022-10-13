@@ -2,14 +2,14 @@ seed: 0
 generate:
   r: 20
   r_loc:
-    - -1.0
-    - 1.0
+    - -3.0
+    - 3.0
   r_scale:
     - 0.1
     - 1.0
-  n_train: 10000
-  n_val: 1000
-  n_test: 10000
+  n_train: 1000
+  n_val: 200
+  n_test: 1000
 train:
   embed_size: 4
   dense_size: 128

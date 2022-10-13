@@ -1,6 +1,6 @@
 stages:
   generate:
-    cmd: python src/gen.py
+    cmd: python src/create.py
     deps:
       - src/create.py
       - src/generators.py
@@ -14,8 +14,6 @@ stages:
       - generate
     plots:
       - evaluation/train_stripplot.png
-      - evaluation/val_stripplot.png
-      - evaluation/test_stripplot.png
   train:
     cmd: python src/train.py
     deps:
@@ -43,5 +41,5 @@ stages:
     params:
       - eval
     plots:
-      - evaluation/vs_test.png
       - evaluation/vs_underlying.png
+      - evaluation/cdf.png

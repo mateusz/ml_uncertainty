@@ -88,12 +88,14 @@ class MonteCarloDropoutNet:
             onesigma_interval = stats.norm.interval(onesigma, pred_mean, calib_std)
             pred_low = onesigma_interval[0]
             pred_high = onesigma_interval[1]
-            cdf = pd.DataFrame([true_val, pred_low, pred_high]).transpose()
-            # TODO figure out whats going on in here
-            cdf['in_interval'] = (cdf['val']>cdf['Unnamed 0']) & (cdf['val']<cdf['Unnamed 1'])
-            in_interval = len(cdf[cdf['in_interval']])
+            decision = pd.DataFrame({
+                'true_val': true_val,
+                'pred_low': pred_low,
+                'pred_high': pred_high,
+            })
+            decision['decision'] = (decision['true_val']>decision['pred_low']) & (decision['true_val']<decision['pred_high'])
 
-            coverage = in_interval/len(true_val)
+            coverage = len(decision[decision['decision']])/len(true_val)
 
             if coverage>onesigma:
                 best_cal = c
@@ -126,17 +128,16 @@ class MonteCarloDropoutNet:
         if calibration is None:
             calibration = self.calibration
 
+        X = X.reset_index().drop('index', axis=1)
         preds = pd.concat(
                 [pd.DataFrame(X, columns=['id'])]*repeats
             ).reset_index()
-        preds['pred'] = self.inner_predict(preds['id'].to_numpy()).reshape(len(preds))
-        preds = preds.reset_index()
+        preds['pred'] = self.inner_predict(preds['id']).reshape(len(preds))
 
-        predsagg = preds.groupby(['index']).mean().reset_index().rename({'pred': 'pred_mean'}, axis=1)
-        predsagg['pred_std'] = calibration * preds.groupby(['index']).std().reset_index()['pred']
-        predsagg = predsagg.drop(['index'], axis=1)
+        X['pred_mean'] = preds.groupby(['index']).mean()['pred']
+        X['pred_std'] = calibration*preds.groupby(['index']).std()['pred']
 
-        return predsagg
+        return X
 
     def save_model(self):
         with open('%s.json' % self.model_path, 'w', encoding='utf-8') as f:
