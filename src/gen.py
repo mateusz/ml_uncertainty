@@ -9,6 +9,7 @@ def main():
     params = dvc.api.params_show()
 
     g = NormalGenerator(seed=params['seed'], r=params['generate']['r'], r_loc=params['generate']['r_loc'], r_scale=params['generate']['r_scale'])
+    g.get_dists().to_csv('data/dists.csv')
 
     def create(name):
         d = g.generate(n=params['generate']['n_%s' % name])

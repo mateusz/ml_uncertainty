@@ -14,6 +14,9 @@ class Resource:
         self.seed += 1
         return stats.norm.rvs(size=self.m, loc=self.loc, scale=self.scale, random_state=self.seed)
 
+    def get_dist(self):
+        return [self.id, self.loc, self.scale]
+
 class NormalGenerator:
     def __init__(
         self,
@@ -56,3 +59,6 @@ class NormalGenerator:
                     collected.append([resource.id, g])
 
         return pd.DataFrame(collected, columns=['id', 'val'])
+
+    def get_dists(self):
+        return pd.DataFrame([d.get_dist() for d in self.resources], columns=['id', 'loc', 'scale'])

@@ -5,6 +5,7 @@ stages:
       - src/gen.py
       - src/generators.py
     outs:
+      - data/dists.csv
       - data/train.csv
       - data/val.csv
       - data/test.csv
