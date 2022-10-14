@@ -80,7 +80,7 @@ class MonteCarloDropoutNet:
         coverage = 0.0
         best_cal = None
 
-        for c in np.arange(1.0, 100.0, 0.1):
+        for c in np.arange(0.1, 100.0, 0.1):
             calib_std = c*pred_std
 
             onesigma_interval = stats.norm.interval(onesigma, pred_mean, calib_std)

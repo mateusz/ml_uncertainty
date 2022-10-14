@@ -11,9 +11,9 @@ generate:
   n_val: 200
   n_test: 1000
 train:
-  embed_size: 4
-  dense_size: 128
-  dense_dropout: 0.1
+  embed_size: 1
+  dense_size: 1024
+  dense_dropout: 0.5
   learning_rate: 0.01
 eval:
   repeats: 1000
