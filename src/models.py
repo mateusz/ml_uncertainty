@@ -68,13 +68,11 @@ class MonteCarloDropoutNet:
         )
 
         self.model = tf.keras.models.load_model('%s' % self.model_path, compile=False)
-        
-        print('val_loss: %.4f' % np.min(history.history['val_loss']))
-        with open('metrics/train.json', 'w', encoding='utf-8') as f:
-            json.dump({
-                'loss': np.min(history.history['loss']),
-                'val_loss': np.min(history.history['val_loss']),
-            }, f)
+
+        self.loss = np.min(history.history['loss'])
+        self.val_loss = np.min(history.history['val_loss'])
+        print('loss: %.4f' % self.loss)
+        print('val_loss: %.4f' % self.val_loss)
 
     def autotune(self, pred_mean, pred_std, true_val):
         onesigma = stats.norm.cdf(1, loc=0, scale=1)-stats.norm.cdf(-1, loc=0, scale=1)
@@ -115,11 +113,19 @@ class MonteCarloDropoutNet:
 
         print('calib_std_mean: %.2f' % calib_std.mean())
         print('calib_std_std: %.2f' % calib_std.std())
-        with open('metrics/calib.json', 'w', encoding='utf-8') as f:
+
+        self.calib_std_mean = calib_std.mean()
+        self.calib_std_std = calib_std.std()
+
+    def write_metrics(self):
+        with open('metrics/train.json', 'w', encoding='utf-8') as f:
             json.dump({
-                'calib_std_mean': calib_std.mean(),
-                'calib_std_std': calib_std.std(),
+                'calib_std_mean': self.calib_std_mean,
+                'calib_std_std': self.calib_std_std,
+                'loss': self.loss,
+                'val_loss': self.val_loss,
             }, f)
+
 
     def inner_predict(self, X_predict):
         return self.model.predict(X_predict, batch_size=1000)

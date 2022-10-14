@@ -17,6 +17,7 @@ def main():
     net.init(train['id'])
     net.train(train['id'], train['val'], val['id'], val['val'])
     net.calibrate(val['id'], val['val'])
+    net.write_metrics()
     net.save_model()
 
 if __name__ == '__main__':

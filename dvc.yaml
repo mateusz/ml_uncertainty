@@ -28,7 +28,6 @@ stages:
       - train
     metrics:
       - metrics/train.json
-      - metrics/calib.json
   eval:
     cmd: python src/eval.py
     deps:
@@ -42,4 +41,6 @@ stages:
       - eval
     plots:
       - evaluation/vs_underlying.png
-      - evaluation/cdf.png
+      - evaluation/cdf_dist.png
+    metrics:
+      - metrics/eval.json

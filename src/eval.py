@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import dvc.api
 import scipy.stats as stats
+from tensorflow.keras.losses import MeanSquaredError
+import json
 
 def convert_to_boxplot(means, stds):
     q1 = stats.norm.ppf(0.25, loc=means, scale=stds)
@@ -27,12 +29,19 @@ def main():
     d = pd.DataFrame(test['id'].unique(), columns=['id'])
     preds = model.predict(d['id'], repeats=params['eval']['repeats'])
 
-    # Ordering and labeling still busted
-    psorted = preds.sort_values('id')
-    pred_boxplots = convert_to_boxplot(psorted['pred_mean'], psorted['pred_std'])
+    preds = preds.set_index('id')
+    dists = dists.set_index('id')
 
-    dsorted = dists.sort_values('id')
-    dists_boxplots = convert_to_boxplot(dsorted['loc'], dsorted['scale'])
+    # Force into the same label
+    dists['pred_mean'] = preds['pred_mean']
+    dists['pred_std'] = preds['pred_std']
+
+    mse = MeanSquaredError()
+    underlying_loc_mse = mse(dists['loc'], dists['pred_mean']).numpy()
+    underlying_scale_mse = mse(dists['scale'], dists['pred_std']).numpy()
+
+    pred_boxplots = convert_to_boxplot(dists['pred_mean'], dists['pred_std'])
+    dists_boxplots = convert_to_boxplot(dists['loc'], dists['scale'])
 
     fig, ax = plt.subplots()
     sns.boxplot(data=pred_boxplots, palette='viridis', width=0.3, showfliers=False)
@@ -45,18 +54,36 @@ def main():
         capprops=dict(alpha=0.3),
     )
     plt.title('prediction vs underlying')
+    plt.xlabel('id')
+    plt.ylabel('val')
     plt.savefig('evaluation/vs_underlying.png')
     plt.close()
 
     onesigma = stats.norm.cdf(1, loc=0, scale=1)-stats.norm.cdf(-1, loc=0, scale=1)
     preds = model.predict(test)
     preds['cdf'] = stats.norm.cdf(preds['val'], loc=preds['pred_mean'], scale=preds['pred_std'])
-    preds['in_interval'] = (preds['cdf']>stats.norm.cdf(-1,0,1)) & (preds['cdf']<stats.norm.cdf(1,0,1))
+    preds['in_onesigma'] = (preds['cdf']>stats.norm.cdf(-1,0,1)) & (preds['cdf']<stats.norm.cdf(1,0,1))
 
     fig, ax = plt.subplots()
-    sns.histplot(data=preds, x='cdf', hue='in_interval', element='step', bins=max(200, round(len(preds)/10)))
-    plt.savefig('evaluation/cdf.png')
+    sns.histplot(data=preds, x='cdf', hue='in_onesigma', element='step', bins=max(200, round(len(preds)/10)))
+    plt.title('CDF distribution (sample counts at given CDF value)')
+    plt.savefig('evaluation/cdf_dist.png')
     plt.close()
+
+    preds = preds.set_index('id')
+    mse = MeanSquaredError()
+    preds = preds[['pred_std']].join(dists[['scale']])
+    test_std_mse = mse(preds['scale'], preds['pred_std']).numpy()
+    print('test_std_mse: %.4f' % test_std_mse)
+    print('underlying_loc_mse: %.4f' % underlying_loc_mse)
+    print('underlying_scale_mse: %.4f' % underlying_scale_mse)
+    with open('metrics/eval.json', 'w', encoding='utf-8') as f:
+        json.dump({
+            'test_std_mse': float(test_std_mse),
+            'underlying_loc_mse': float(underlying_loc_mse),
+            'underlying_scale_mse': float(underlying_scale_mse),
+        }, f)
+
 
 
 if __name__ == '__main__':
