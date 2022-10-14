@@ -53,7 +53,7 @@ def main():
         whiskerprops=dict(alpha=0.3),
         capprops=dict(alpha=0.3),
     )
-    plt.title('prediction vs underlying')
+    plt.title('model vs underlying')
     plt.xlabel('id')
     plt.ylabel('val')
     plt.savefig('evaluation/vs_underlying.png')
@@ -66,7 +66,7 @@ def main():
 
     fig, ax = plt.subplots()
     sns.histplot(data=preds, x='cdf', hue='in_onesigma', element='step', bins=max(200, round(len(preds)/10)))
-    plt.title('CDF distribution (sample counts at given CDF value)')
+    plt.title('Test CDF distribution (sample counts at given CDF value)')
     plt.savefig('evaluation/cdf_dist.png')
     plt.close()
 

@@ -80,7 +80,7 @@ class MonteCarloDropoutNet:
         coverage = 0.0
         best_cal = None
 
-        for c in np.arange(1.0, 100.0, 0.25):
+        for c in np.arange(1.0, 100.0, 0.1):
             calib_std = c*pred_std
 
             onesigma_interval = stats.norm.interval(onesigma, pred_mean, calib_std)
@@ -120,6 +120,7 @@ class MonteCarloDropoutNet:
     def write_metrics(self):
         with open('metrics/train.json', 'w', encoding='utf-8') as f:
             json.dump({
+                'calibration': self.calibration,
                 'calib_std_mean': self.calib_std_mean,
                 'calib_std_std': self.calib_std_std,
                 'loss': self.loss,

@@ -37,8 +37,8 @@ stages:
       md5: a0fcd5907380065579539722acd5681a
       size: 5295
     - path: evaluation/train_stripplot.png
-      md5: 6771c0970f6e772f915180f2656ab85e
-      size: 48782
+      md5: 39397f5cdbdbe4d8b98cca9c08e044b9
+      size: 49030
   train:
     cmd: python src/train.py
     deps:
@@ -49,8 +49,8 @@ stages:
       md5: a0fcd5907380065579539722acd5681a
       size: 5295
     - path: src/models.py
-      md5: 4535195eb2880f03cc8caeac124e462c
-      size: 6181
+      md5: 0c292d5820b8b1ff62962539d2f901e7
+      size: 6229
     - path: src/train.py
       md5: 0d2bc397502efde177d22e88cf77280c
       size: 714
@@ -59,19 +59,19 @@ stages:
         train:
           embed_size: 4
           dense_size: 128
-          dense_dropout: 0.5
+          dense_dropout: 0.1
           learning_rate: 0.01
     outs:
     - path: metrics/train.json
-      md5: 75823e15005c51589100381947c2c2f6
-      size: 135
+      md5: fd0bc9c21f404d7f61fe1c3be76a26e6
+      size: 169
     - path: models/monte_carlo_dropout
-      md5: 920a8bb6f8e3f30035b77e1d6874af0c.dir
+      md5: e85d68ff80d8d0a83f025f9edf833f15.dir
       size: 282926
       nfiles: 4
     - path: models/monte_carlo_dropout.json
-      md5: 8ae92d6038293cee630f71d6c090c6a6
-      size: 145
+      md5: e8af8d5dd19aa34ab2179d7d5e1568b3
+      size: 159
   eval:
     cmd: python src/eval.py
     deps:
@@ -82,29 +82,29 @@ stages:
       md5: 4152624b7b601f3c0c05b1819b8c7c4b
       size: 26717
     - path: models/monte_carlo_dropout
-      md5: 920a8bb6f8e3f30035b77e1d6874af0c.dir
+      md5: e85d68ff80d8d0a83f025f9edf833f15.dir
       size: 282926
       nfiles: 4
     - path: models/monte_carlo_dropout.json
-      md5: 8ae92d6038293cee630f71d6c090c6a6
-      size: 145
+      md5: e8af8d5dd19aa34ab2179d7d5e1568b3
+      size: 159
     - path: src/eval.py
-      md5: 15e64748a386817291cb211cffdd9114
+      md5: 50681af7570a57d63b77f067c838f474
       size: 3191
     - path: src/models.py
-      md5: 4535195eb2880f03cc8caeac124e462c
-      size: 6181
+      md5: 0c292d5820b8b1ff62962539d2f901e7
+      size: 6229
     params:
       params.yaml:
         eval:
           repeats: 1000
     outs:
     - path: evaluation/cdf_dist.png
-      md5: 689c80c6729fcb1f385ec35784aa9a14
-      size: 25737
+      md5: 841a419a3d06a5404fa285f793ec44b9
+      size: 23915
     - path: evaluation/vs_underlying.png
-      md5: e8b5a0589a1c5f2d443bf3206c7b5ca9
-      size: 25013
+      md5: 51baaa16ffe4dfc99e8faeb3f252e7a5
+      size: 24972
     - path: metrics/eval.json
-      md5: fb3cefc5ab9111685d9d3b73cfaaaf3b
-      size: 126
+      md5: 4c559396aabf92ec587963c7beceec74
+      size: 125
