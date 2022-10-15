@@ -22,7 +22,7 @@ The technique used here can be used to estimate both aleatory (inherent), as wel
 
 Measure of success is how well the model replicates original distributions.
 
-## Graphs - walkthrough
+## Graphs walkthrough
 
 The following graphs are produced - here, a base experiment is depicted. Graph results for remaining experiments are at the bottom.
 
@@ -51,6 +51,18 @@ In other words, standard deviation values produced by the model get uniformly st
 Validation samples captured by the calibration are depicted in orange on this histogram, and should be around 2/3rds of all samples.
 
 ![](results/base/cdf_dist.png)
+
+## Technique for estimating variance
+
+The method of estimating variance is based on dropout. During inference, dropout layer remains enabled:
+
+```python
+l = tf.keras.layers.Dropout(self.dense_dropout)(l, training=True)
+```
+
+As a result, only a subset of neurons is used to produce the prediction, giving responses that exhibit variance even if the input is held constant. To produce a single output we iterate the inference 30 times, which produces a distribution. From this we can estimate both the mean as well as variance.
+
+There are alternative techniques for estimating variance with neural nets, which are unused here. One of them is using an ensemble of neural nets in a similar way to dropout. Another is architecting the network to produce variance explicitly as an output.
 
 ## Experiments
 
@@ -95,6 +107,10 @@ The following metrics are provided:
 | [low_size_and_dropout] | 1.7         | 0.49914  | 0.13894            | 0.046715             |
 
 ## Graphs
+
+### base
+
+Base graphs are included above in "Graphs walkthrough"
 
 ### large_size
 
